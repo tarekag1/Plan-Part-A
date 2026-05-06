@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Drop Shot Coffee — Plan B vs Plan C</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --blue-light: #E6F1FB;
+  --blue-mid: #85B7EB;
+  --blue-dark: #0C447C;
+  --blue-deeper: #042C53;
+  --green-light: #E1F5EE;
+  --green-mid: #5DCAA5;
+  --green-dark: #085041;
+  --amber-light: #FAEEDA;
+  --amber-mid: #EF9F27;
+  --amber-dark: #633806;
+  --red-light: #FCEBEB;
+  --red-dark: #791F1F;
+  --gray-light: #F1EFE8;
+  --gray-mid: #B4B2A9;
+  --gray-dark: #444441;
+  --border: #E2E0D8;
+  --text: #1a1a18;
+  --text-muted: #6b6960;
+  --bg: #FAFAF8;
+  --surface: #ffffff;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: 'DM Sans', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  font-size: 14px;
+  line-height: 1.6;
+}
+.header {
+  background: var(--blue-deeper);
+  color: white;
+  padding: 2.5rem 3rem;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+}
+.header-brand { font-family: 'DM Mono', monospace; font-size: 11px; letter-spacing: .12em; text-transform: uppercase; color: var(--blue-mid); margin-bottom: 8px; }
+.header h1 { font-size: 28px; font-weight: 300; color: white; letter-spacing: -.02em; }
+.header h1 span { font-weight: 500; }
+.header-meta { font-size: 11px; color: var(--blue-mid); font-family: 'DM Mono', monospace; text-align: right; line-height: 1.8; }
+.container { max-width: 1100px; margin: 0 auto; padding: 2rem 3rem 4rem; }
+.tabs { display: flex; gap: 6px; margin: 2rem 0 1.5rem; border-bottom: 1px solid var(--border); padding-bottom: 0; }
+.tab {
+  padding: 8px 20px;
+  font-size: 13px;
+  font-family: 'DM Sans', sans-serif;
+  cursor: pointer;
+  border: 1px solid transparent;
+  border-bottom: none;
+  border-radius: 6px 6px 0 0;
+  background: none;
+  color: var(--text-muted);
+  position: relative;
+  bottom: -1px;
+  transition: all .15s;
+}
+.tab:hover { color: var(--text); background: var(--gray-light); }
+.tab.active { background: var(--surface); border-color: var(--border); color: var(--blue-dark); font-weight: 500; }
+.tab.active.green { color: var(--green-dark); }
+.panel { display: none; }
+.panel.active { display: block; }
+.section-label {
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin-bottom: 1.25rem;
+}
+/* COMPARISON TABLE */
+.compare-wrap { overflow-x: auto; }
+table.compare {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+table.compare th {
+  padding: 10px 16px;
+  font-size: 11px;
+  font-weight: 500;
+  text-align: left;
+  border-bottom: 1.5px solid var(--border);
+  white-space: nowrap;
+}
+table.compare th.h-dim { background: var(--gray-light); color: var(--text-muted); width: 200px; }
+table.compare th.h-b { background: var(--blue-light); color: var(--blue-dark); text-align: center; }
+table.compare th.h-c { background: var(--green-light); color: var(--green-dark); text-align: center; }
+table.compare td {
+  padding: 10px 16px;
+  border-bottom: 1px solid var(--border);
+  vertical-align: top;
+  font-size: 13px;
+  color: var(--text);
+}
+table.compare tr:hover td { background: #f7f6f3; }
+table.compare td.dim { font-weight: 500; font-size: 12px; color: var(--text-muted); background: var(--surface); }
+table.compare td.b { border-left: 1px solid var(--border); }
+table.compare td.c { border-left: 1px solid var(--border); }
+table.compare tr.hl td { background: var(--amber-light) !important; }
+table.compare tr.hl:hover td { background: #f5e8c8 !important; }
+.badge {
+  display: inline-block;
+  font-size: 11px;
+  font-family: 'DM Mono', monospace;
+  padding: 2px 9px;
+  border-radius: 20px;
+  font-weight: 400;
+  white-space: nowrap;
+  margin-right: 4px;
+}
+.bd-b { background: var(--blue-light); color: var(--blue-dark); }
+.bd-c { background: var(--green-light); color: var(--green-dark); }
+.bd-w { background: var(--amber-light); color: var(--amber-dark); }
+.bd-r { background: var(--red-light); color: var(--red-dark); }
+.bd-g { background: var(--gray-light); color: var(--gray-dark); }
+/* MILESTONE TABLE */
+table.ms {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 12px;
+  table-layout: fixed;
+}
+table.ms th {
+  font-size: 10px;
+  font-weight: 500;
+  font-family: 'DM Mono', monospace;
+  color: var(--text-muted);
+  padding: 7px 10px;
+  border-bottom: 1.5px solid var(--border);
+  text-align: left;
+  background: var(--gray-light);
+  white-space: nowrap;
+}
+table.ms th.hb { background: var(--blue-light); color: var(--blue-dark); }
+table.ms th.hc { background: var(--green-light); color: var(--green-dark); }
+table.ms td { padding: 7px 10px; border-bottom: 1px solid var(--border); vertical-align: top; }
+table.ms tr:hover td { background: #f7f6f3; }
+table.ms tr.sec td { background: var(--gray-light); font-size: 10px; font-weight: 500; font-family: 'DM Mono', monospace; text-transform: uppercase; letter-spacing: .07em; color: var(--text-muted); }
+.ms-text { font-size: 12px; line-height: 1.5; color: var(--text); }
+.ms-own { font-size: 11px; color: var(--text-muted); margin-top: 3px; }
+.ms-na { font-size: 11px; font-style: italic; color: var(--gray-mid); }
+.ms-seq { font-size: 11px; font-family: 'DM Mono', monospace; color: var(--text-muted); }
+.ms-cat { font-size: 10px; font-weight: 500; text-transform: uppercase; letter-spacing: .05em; color: var(--text-muted); }
+.ms-by { font-size: 11px; font-family: 'DM Mono', monospace; color: var(--text-muted); white-space: nowrap; }
+select {
+  font-size: 11px;
+  font-family: 'DM Sans', sans-serif;
+  padding: 3px 6px;
+  border: 1px solid var(--border);
+  border-radius: 5px;
+  background: var(--surface);
+  color: var(--text);
+  width: 100%;
+  cursor: pointer;
+}
+.s-ns { border-color: var(--gray-mid); color: var(--gray-dark); }
+.s-ip { border-color: var(--amber-mid); color: var(--amber-dark); }
+.s-bl { border-color: #E24B4A; color: var(--red-dark); }
+.s-dn { border-color: var(--green-mid); color: var(--green-dark); }
+.s-na { border-color: #D3D1C7; color: var(--gray-mid); }
+.footer { margin-top: 3rem; padding-top: 1.5rem; border-top: 1px solid var(--border); font-family: 'DM Mono', monospace; font-size: 10px; color: var(--text-muted); display: flex; justify-content: space-between; }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div>
+    <div class="header-brand">Drop Shot Coffee — Confidential Internal Document</div>
+    <h1><span>Plan B</span> vs <span>Plan C</span> — Strategic Comparison</h1>
+  </div>
+  <div class="header-meta">
+    May 2026<br>
+    Deliverable 1 of 3<br>
+    Internal use only
+  </div>
+</div>
+
+<div class="container">
+
+  <div class="tabs">
+    <button class="tab active" onclick="show('comparison',this)">Plan B vs Plan C — strategic comparison</button>
+    <button class="tab" onclick="show('milestones',this)">Appendix — milestone table</button>
+  </div>
+
+  <!-- COMPARISON PANEL -->
+  <div class="panel active" id="panel-comparison">
+    <div class="section-label">Decision framework</div>
+    <div class="compare-wrap">
+    <table class="compare">
+    <thead><tr>
+      <th class="h-dim">Dimension</th>
+      <th class="h-b">Plan B — $300K path</th>
+      <th class="h-c">Plan C — $115K path</th>
+    </tr></thead>
+    <tbody>
+    <tr class="hl">
+      <td class="dim">Total duration</td>
+      <td class="b"><span class="badge bd-b">~9 months</span> From day zero to POC achieved — two tournaments, full system live</td>
+      <td class="c"><span class="badge bd-c">~6 months</span> From day zero to POC achieved — one tournament, core concept validated</td>
+    </tr>
+    <tr>
+      <td class="dim">Budget</td>
+      <td class="b"><span class="badge bd-b">$300K</span> Full operational budget — all workstreams funded</td>
+      <td class="c"><span class="badge bd-c">$115K</span> Lean POC budget — essential workstreams only</td>
+    </tr>
+    <tr>
+      <td class="dim">Founders salary</td>
+      <td class="b"><span class="badge bd-b">Full or close to full</span> Founder salaries activated upon raise closing</td>
+      <td class="c"><span class="badge bd-w">Waived or significantly reduced</span> No salary budget at this funding level</td>
+    </tr>
+    <tr>
+      <td class="dim">Fundraising dependency</td>
+      <td class="b"><span class="badge bd-w">High</span> Requires Headway VC to close $300K — execution blocked until funded</td>
+      <td class="c"><span class="badge bd-g">None</span> Funds already secured — execution starts immediately</td>
+    </tr>
+    <tr>
+      <td class="dim">Tournament 1 target</td>
+      <td class="b">September 1, 2026</td>
+      <td class="c">September 1, 2026</td>
+    </tr>
+    <tr>
+      <td class="dim">Tournament 2</td>
+      <td class="b">Rolls naturally — approximately November 2026</td>
+      <td class="c"><span class="badge bd-g">Not in scope</span></td>
+    </tr>
+    <tr>
+      <td class="dim">Venue strategy</td>
+      <td class="b">2 venues — Venue 2 confirmed for Tournament 2 + permanent cart terms negotiated at Venue 1</td>
+      <td class="c">1 venue — Centerline, Rohnert Park. Tournament 1 only</td>
+    </tr>
+    <tr>
+      <td class="dim">Permanent cart spot</td>
+      <td class="b"><span class="badge bd-b">Yes</span> Permanent or recurring cart presence secured at Venue 1 — space, access, and revenue share confirmed</td>
+      <td class="c"><span class="badge bd-g">Not in scope</span></td>
+    </tr>
+    <tr>
+      <td class="dim">Cart approach</td>
+      <td class="b">Custom-built branded cart — permanently deployed at Venue 1 post-Tournament 1</td>
+      <td class="c">Rental cart — branded for Tournament 1 only</td>
+    </tr>
+    <tr>
+      <td class="dim">Menu scope</td>
+      <td class="b">Full menu R&amp;D — complete beverage range, proprietary blend, standardized across formats</td>
+      <td class="c">Tournament menu only — curated selection from roaster partner</td>
+    </tr>
+    <tr>
+      <td class="dim">Brand scope</td>
+      <td class="b">Full identity — core assets + cart wrap, merchandise, and digital assets</td>
+      <td class="c">Core assets only — logo, visual identity, design system</td>
+    </tr>
+    <tr>
+      <td class="dim">Ambassadors</td>
+      <td class="b">2 ambassadors — Jonas Satuito + second ambassador recruited and activated</td>
+      <td class="c">1 ambassador — Jonas Satuito only</td>
+    </tr>
+    <tr>
+      <td class="dim">Software</td>
+      <td class="b">App MVP — full build with dev partner. App V1 live at Tournament 2</td>
+      <td class="c">AI-powered prototype — lightweight simulation of core features. Deployed at Tournament 1</td>
+    </tr>
+    <tr>
+      <td class="dim">Minor events program</td>
+      <td class="b">Yes — ambassador-led micro-events at venue partners between tournaments</td>
+      <td class="c"><span class="badge bd-g">Not in scope</span></td>
+    </tr>
+    <tr>
+      <td class="dim">End state — POC achieved</td>
+      <td class="b">Two tournaments completed, custom cart permanently installed at Venue 1, full menu validated, App V1 live, ambassador network active, venue pipeline established</td>
+      <td class="c">One major tournament completed, branded cart deployed, premium menu presented, ambassador-driven attendance, one venue partner validated</td>
+    </tr>
+    <tr>
+      <td class="dim">Key risk</td>
+      <td class="b"><span class="badge bd-r">Fundraising</span> Entire plan gated on $300K close — delays cascade to all workstreams</td>
+      <td class="c"><span class="badge bd-w">Scope</span> Limited POC — proves concept but leaves most of the model untested</td>
+    </tr>
+    <tr>
+      <td class="dim">Tarek's role</td>
+      <td class="b">CEO — strategy, brand, venues, ambassadors, software, tournament execution</td>
+      <td class="c">CEO — same scope, leaner execution with fewer parallel workstreams</td>
+    </tr>
+    <tr>
+      <td class="dim">Karim's role</td>
+      <td class="b">COO — roaster, full menu R&amp;D, custom cart build, physical materials, tournament ops</td>
+      <td class="c">COO — roaster, tournament menu, rental cart, physical materials, tournament ops</td>
+    </tr>
+    </tbody>
+    </table>
+    </div>
+  </div>
+
+  <!-- MILESTONE PANEL -->
+  <div class="panel" id="panel-milestones">
+    <div class="section-label">Appendix — milestone comparison table</div>
+    <div class="compare-wrap">
+    <table class="ms">
+    <colgroup><col style="width:80px"><col style="width:44px"><col style="width:210px"><col style="width:70px"><col style="width:100px"><col style="width:210px"><col style="width:70px"><col style="width:100px"></colgroup>
+    <thead><tr>
+      <th>Category</th><th>#</th>
+      <th class="hb">Plan B — $300K path</th><th class="hb">By</th><th class="hb">Status</th>
+      <th class="hc">Plan C — $115K path</th><th class="hc">By</th><th class="hc">Status</th>
+    </tr></thead>
+    <tbody id="ms-tbody"></tbody>
+    </table>
+    </div>
+  </div>
+
+  <div class="footer">
+    <span>Drop Shot Coffee — Confidential Internal Document</span>
+    <span>May 2026 · Deliverable 1 of 3</span>
+  </div>
+
+</div>
+
+<script>
+function show(id, btn) {
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t => { t.classList.remove('active'); t.classList.remove('green'); });
+  document.getElementById('panel-' + id).classList.add('active');
+  btn.classList.add('active');
+  if (id === 'milestones') btn.classList.add('green');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+const NS='ns', IP='ip', BL='bl', DN='dn', NA='na';
+const lbl = { ns:'Not started', ip:'In progress', bl:'Blocked', dn:'Done', na:'N/A' };
+const cls = { ns:'s-ns', ip:'s-ip', bl:'s-bl', dn:'s-dn', na:'s-na' };
+let si = 0;
+function sel(val) {
+  const id = 'st' + (si++);
+  return `<select id="${id}" class="${cls[val]}" onchange="this.className=({ns:'s-ns',ip:'s-ip',bl:'s-bl',dn:'s-dn',na:'s-na'})[this.value]">${Object.entries(lbl).map(([k,v]) => `<option value="${k}"${k===val?' selected':''}>${v}</option>`).join('')}</select>`;
+}
+
+const rows = [
+  {sec:'Fundraising'},
+  {cat:'Fundraising',seq:'F-1',pb:'$300K raise closed — Headway VC delivers, founder salaries activated, and full operational budget deployed.',pbo:'Headway VC',db:'Week 8',pc:'$115K secured and sufficient to execute a limited-scope POC. Fundraising efforts continue in parallel toward the $750K target.',pco:'Headway VC',dc:'Day 0',sb:NS,sc:DN},
+  {sec:'Legal & Corporate'},
+  {cat:'Legal',seq:'L-1',pb:'Delaware C Corp incorporated and bank account opened.',pbo:'Tarek',db:'Week 2',pc:'Delaware C Corp incorporated and bank account opened.',pco:'Tarek',dc:'Week 2',sb:NS,sc:NS},
+  {cat:'Legal',seq:'L-2',pb:'Bylaws established, distinct share classes issued, and shares transferred to investors on a pro-rata basis relative to capital raised. Triggered upon receipt of each investment tranche.',pbo:'Tarek + attorney',db:'Week 9',pc:'Bylaws established, distinct share classes issued, and shares transferred to investors on a pro-rata basis relative to capital raised. Triggered upon receipt of each investment tranche.',pco:'Tarek + attorney',dc:'Week 3',sb:NS,sc:NS},
+  {sec:'Brand & Identity'},
+  {cat:'Brand',seq:'B-1',pb:'Core brand assets completed — logo, visual identity, and design system established as the foundation for all subsequent brand applications.',pbo:'Tarek',db:'Week 4',pc:'Core brand assets completed — logo, visual identity, and design system established as the foundation for all subsequent brand applications.',pco:'Tarek',dc:'Week 4',sb:NS,sc:NS},
+  {cat:'Brand',seq:'B-2',pb:'Full brand identity extended — cart wrap design, merchandise, and digital assets finalized ahead of Tournament 1.',pbo:'Tarek',db:'Week 10',pc:null,sb:NS,sc:NA},
+  {cat:'Brand',seq:'B-3',pb:'Branded physical materials manufactured and tournament-ready — cups, signage, and cart branding materials produced and quality-checked.',pbo:'Karim',db:'Week 14',pc:'Branded physical materials manufactured and tournament-ready — cups, signage, and cart branding materials produced and quality-checked.',pco:'Karim',dc:'Week 13',sb:NS,sc:NS},
+  {sec:'Venues'},
+  {cat:'Venues',seq:'V-1',pb:'Venue 1 partnership formalized — written agreement secured with first venue partner, tournament date and terms confirmed.',pbo:'Tarek',db:'Week 3',pc:'Venue 1 partnership formalized — written agreement secured with first venue partner, tournament date and terms confirmed.',pco:'Tarek',dc:'Week 3',sb:NS,sc:NS},
+  {cat:'Venues',seq:'V-2',pb:'Venue 2 partnership confirmed — second venue partner secured, pipeline established for Tournament 2.',pbo:'Tarek',db:'Week 11',pc:null,sb:NS,sc:NA},
+  {cat:'Venues',seq:'V-3',pb:'Venue partner agreement includes terms for permanent or recurring Drop Shot Coffee cart presence — space, access, revenue share, and operational terms confirmed.',pbo:'Tarek',db:'Week 16',pc:null,sb:NS,sc:NA},
+  {sec:'Ambassadors'},
+  {cat:'Ambassadors',seq:'A-1',pb:'Ambassador agreement with Jonas Satuito finalized and signed. Scope of work, deliverables, compensation, and tournament activation responsibilities formally commissioned.',pbo:'Tarek',db:'Week 1',pc:'Ambassador agreement with Jonas Satuito finalized and signed. Scope of work, deliverables, compensation, and tournament activation responsibilities formally commissioned.',pco:'Tarek',dc:'Week 1',sb:NS,sc:IP},
+  {cat:'Ambassadors',seq:'A-2',pb:'Joint activation plan developed with Jonas — tournament promotion strategy, community outreach approach, and ambassador deliverables defined and agreed upon.',pbo:'Tarek + Jonas',db:'Week 5',pc:'Joint activation plan developed with Jonas — tournament promotion strategy, community outreach approach, and ambassador deliverables defined and agreed upon.',pco:'Tarek + Jonas',dc:'Week 4',sb:NS,sc:NS},
+  {cat:'Ambassadors',seq:'A-0',pb:'Second ambassador identified, agreement executed, and activation plan commissioned.',pbo:'Tarek',db:'Week 12',pc:null,sb:NS,sc:NA},
+  {sec:'Menu & Product'},
+  {cat:'Menu',seq:'M-1',pb:'Roaster partner identified, relationship established, and supply terms agreed for tournament operations.',pbo:'Karim',db:'Week 6',pc:'Roaster partner identified, relationship established, and supply terms agreed for tournament operations.',pco:'Karim',dc:'Week 5',sb:NS,sc:NS},
+  {cat:'Menu',seq:'M-2',pb:'First tournament menu finalized — curated beverage selection sourced from partner roaster, priced, and branded as Drop Shot Coffee. Ready for tournament day operations.',pbo:'Karim',db:'Week 12',pc:'First tournament menu finalized — curated beverage selection sourced from partner roaster, priced, and branded as Drop Shot Coffee. Ready for tournament day operations.',pco:'Karim',dc:'Week 11',sb:NS,sc:NS},
+  {cat:'Menu',seq:'M-3',pb:'Full menu R&D completed — market trends analyzed, full beverage range developed, proprietary blend explored and potentially commissioned with roaster partner. Menu standardized across all formats.',pbo:'Karim',db:'Week 15',pc:null,sb:NS,sc:NA},
+  {sec:'Cart & Equipment'},
+  {cat:'Cart',seq:'E-1',pb:'Cart vendor confirmed and terms agreed — custom build commissioned. Drop Shot Coffee branding approach finalized.',pbo:'Karim',db:'Week 7',pc:'Cart vendor confirmed and terms agreed — rental secured. Drop Shot Coffee branding approach finalized.',pco:'Karim / Tarek',dc:'Week 5',sb:NS,sc:NS},
+  {cat:'Cart',seq:'E-2',pb:'Custom branded cart fully built, tested, and operationally ready for Tournament 1 deployment.',pbo:'Karim',db:'Week 14',pc:'Branded rental cart secured, branding materials produced and applied, cart operationally ready for Tournament 1.',pco:'Karim / Tarek',dc:'Week 12',sb:NS,sc:NS},
+  {cat:'Cart',seq:'E-3',pb:'Permanent cart deployment executed at Venue 1 — cart installed, operational workflows established, and venue integration confirmed following venue partnership agreement.',pbo:'Karim',db:'Week 17',pc:null,sb:NS,sc:NA},
+  {sec:'Software'},
+  {cat:'Software',seq:'S-2',pb:'App MVP scoped, development partner selected, and build initiated. Core features defined: player coordination, event sign-up, and points and rewards system.',pbo:'Tarek',db:'Week 9',pc:'Lightweight AI-powered prototype developed to simulate core app functionality — player coordination, event participation, and rewards. Deployed as proof-of-concept digital layer for Tournament 1.',pco:'Tarek',dc:'Week 8',sb:NS,sc:NS},
+  {cat:'Software',seq:'S-1',pb:'App V1 live — player coordination, event sign-up, and points and rewards system functional. Deployed at Tournament 2.',pbo:'Tarek + dev partner',db:'Week 22',pc:null,sb:NS,sc:NA},
+  {sec:'Tournaments'},
+  {cat:'Tournaments',seq:'T-3',pb:'Tournament 1 confirmed — venue secured, format defined, participant pipeline seeded via ambassador network.',pbo:'Tarek',db:'Week 10',pc:'Tournament 1 confirmed — venue secured, format defined, participant pipeline seeded via ambassador network.',pco:'Tarek',dc:'Week 8',sb:NS,sc:NS},
+  {cat:'Tournaments',seq:'T-2',pb:'Tournament 1 executed — custom cart live, partial menu, first ambassador activations, light app presence.',pbo:'Tarek + Karim',db:'Week 17',pc:'Tournament 1 executed — branded rented cart, Drop Shot menu, ambassador-driven attendance.',pco:'Tarek + Karim',dc:'Week 17',sb:NS,sc:NS},
+  {cat:'Tournaments',seq:'T-1.5',pb:'Ambassador-led minor events program launched — recurring community micro-events activated through the ambassador network at confirmed venue partners, building momentum and community engagement between tournaments.',pbo:'Tarek',db:'Week 20',pc:null,sb:NS,sc:NA},
+  {cat:'Tournaments',seq:'T-1',pb:'Tournament 2 executed — app V1 deployed, full branded cart, complete menu, ambassador network active.',pbo:'Tarek + Karim',db:'Week 26',pc:null,sb:NS,sc:NA},
+  {sec:'End State — POC Achieved'},
+  {cat:'End State',seq:'—',pb:'Two tournaments completed, custom cart permanently installed at Venue 1, full menu validated, App V1 live, ambassador network active, venue pipeline established.',pbo:'',db:'Week 26',pc:'One major tournament completed, branded cart deployed, premium menu presented, ambassador-driven attendance, one venue partner validated.',pco:'',dc:'Week 17',sb:NS,sc:NS},
+];
+
+const tb = document.getElementById('ms-tbody');
+rows.forEach(r => {
+  if (r.sec) {
+    const tr = document.createElement('tr');
+    tr.className = 'sec';
+    tr.innerHTML = `<td colspan="8">${r.sec}</td>`;
+    tb.appendChild(tr);
+    return;
+  }
+  const tr = document.createElement('tr');
+  tr.innerHTML = `
+    <td><span class="ms-cat">${r.cat}</span></td>
+    <td><span class="ms-seq">${r.seq}</span></td>
+    <td><div class="ms-text">${r.pb}</div>${r.pbo ? `<div class="ms-own">Owner: ${r.pbo}</div>` : ''}</td>
+    <td><span class="ms-by">${r.db || '—'}</span></td>
+    <td>${sel(r.sb)}</td>
+    <td>${r.pc ? `<div class="ms-text">${r.pc}</div>${r.pco ? `<div class="ms-own">Owner: ${r.pco}</div>` : ''}` : `<span class="ms-na">Not in scope</span>`}</td>
+    <td><span class="ms-by">${r.dc || '—'}</span></td>
+    <td>${sel(r.sc)}</td>
+  `;
+  tb.appendChild(tr);
+});
+</script>
+</body>
+</html>
